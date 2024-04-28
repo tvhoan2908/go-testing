@@ -1,0 +1,38 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func thrower(c chan int) {
+	for i := 0; i < 5; i++ {
+		c <- i
+		fmt.Println("Threw >>", i)
+	}
+}
+
+func catcher(c chan int) {
+	for i := 0; i < 5; i++ {
+		num := <- c
+		fmt.Println("Caught >>", num)
+	}
+}
+
+func main() {
+	c := make(chan int, 3)
+	go thrower(c)
+	go catcher(c)
+	time.Sleep(time.Second)
+}
+// Output asynchonous
+// Threw >> 0
+// Threw >> 1
+// Threw >> 2
+// Threw >> 3
+// Caught >> 0
+// Caught >> 1
+// Caught >> 2
+// Caught >> 3
+// Caught >> 4
+// Threw >> 4
